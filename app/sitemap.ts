@@ -80,7 +80,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     changeFrequency: 'weekly',
     priority: 0.6,
   })) || []
-
   // SubType routes - all with /en prefix
   const subTypeRoutes = subTypes?.map((subType) => ({
     url: `${baseUrl}/en/${subType.slug}`,
