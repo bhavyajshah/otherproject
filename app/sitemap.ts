@@ -11,79 +11,79 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const types = await getTypes()
   const subTypes = await getSubTypes()
 
-  // Base static routes
+  // Base static routes - all starting with /en
   const staticRoutes = [
     {
-      url: `${baseUrl}`,
+      url: `${baseUrl}/en`,
       lastModified: new Date(),
       changeFrequency: 'daily',
       priority: 1,
     },
     {
-      url: `${baseUrl}/about`,
+      url: `${baseUrl}/en/about`,
       lastModified: new Date(),
       changeFrequency: 'monthly',
       priority: 0.8,
     },
     {
-      url: `${baseUrl}/catalog`,
+      url: `${baseUrl}/en/catalog`,
       lastModified: new Date(),
       changeFrequency: 'daily',
       priority: 0.9,
     },
     {
-      url: `${baseUrl}/contacts`,
+      url: `${baseUrl}/en/contacts`,
       lastModified: new Date(),
       changeFrequency: 'monthly',
       priority: 0.7,
     },
     {
-      url: `${baseUrl}/delivery`,
+      url: `${baseUrl}/en/delivery`,
       lastModified: new Date(),
       changeFrequency: 'monthly',
       priority: 0.7,
     },
     {
-      url: `${baseUrl}/payment`,
+      url: `${baseUrl}/en/payment`,
       lastModified: new Date(),
       changeFrequency: 'monthly',
       priority: 0.7,
     },
     {
-      url: `${baseUrl}/politics`,
+      url: `${baseUrl}/en/politics`,
       lastModified: new Date(),
       changeFrequency: 'monthly',
       priority: 0.5,
     },
   ] as MetadataRoute.Sitemap
 
-  // Product routes
+  // Product routes - all with /en prefix
   const productRoutes = products?.results?.map((product) => ({
-    url: `${baseUrl}/product/${product.article_number}`,
+    url: `${baseUrl}/en/product/${product.article_number}`,
     lastModified: new Date(product.date_and_time),
     changeFrequency: 'weekly',
     priority: 0.8,
   })) || []
 
-  // Category routes
+  // Category routes - all with /en prefix
   const categoryRoutes = categories?.map((category) => ({
-    url: `${baseUrl}/${category.slug}`,
+    url: `${baseUrl}/en/${category.slug}`,
     lastModified: new Date(),
     changeFrequency: 'weekly',
     priority: 0.7,
   })) || []
 
-  // Type routes
+  // Type routes - all with /en prefix
   const typeRoutes = types?.map((type) => ({
-    url: `${baseUrl}/${type.slug}`,
+    url: `${baseUrl}/en/${type.slug}`,
     lastModified: new Date(),
     changeFrequency: 'weekly',
     priority: 0.6,
   })) || []
 
-  // SubType routes
+  // SubType routes - all with /en prefix
   const subTypeRoutes = subTypes?.map((subType) => ({
-    url: `${baseUrl}/${subType.slug}`,
+    url: `${baseUrl}/en/${subType.slug}`,
     lastModified: new Date(),
     changeFrequency: 'weekly',
     priority: 0.5,
