@@ -33,8 +33,6 @@ export const fetchCategories = createAsyncThunk<ICategoriesState["categories"],u
   try {
     const categories = getAllCategories();
 
-    console.log(categories);
-
     return categories;
   } catch (error) {
     return rejectWithValue(`${error}`);

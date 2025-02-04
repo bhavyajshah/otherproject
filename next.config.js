@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 
 const createNextIntlPlugin = require('next-intl/plugin');
- 
+
 const withNextIntl = createNextIntlPlugin();
 
 const nextConfig = {
@@ -20,6 +20,17 @@ const nextConfig = {
       "me-gateway-app-dev",
     ],
     minimumCacheTTL: 1500000,
+  },
+  loader: 'custom',
+  loaderFile: './app/imageLoader.ts',
+  async redirects() {
+    return [
+      {
+        source: "/",
+        destination: "/en",
+        permanent: true,
+      },
+    ]
   },
 };
 

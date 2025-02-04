@@ -18,6 +18,6 @@ export default function robots(): MetadataRoute.Robots {
         '/unsuccessfulPaymentPage/',
       ],
     },
-    sitemap: `${baseUrl}/sitemap.xml`,
+    sitemap: `${baseUrl}/en/sitemap.xml`,
   }
 }

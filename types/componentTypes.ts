@@ -214,6 +214,7 @@ export interface PrefixMaskProps {
 export interface ICurrentCategory {
   id: number;
   name: string;
+  slug: string;
 }
 export interface Country {
   code: string;

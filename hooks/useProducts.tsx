@@ -50,10 +50,9 @@ const useProducts = () => {
     () => dispatch(incrementPage()),
     [dispatch]
   );
-  
+
   const handleSearch = (searchText: string, filtered: IProductMainPage[]) => {
     if (!searchText) return filtered;
-    console.log("searchText", searchText);
     const lowercasedSearchText = searchText.toLowerCase();
 
     // return filtered.filter(({ name }) =>
@@ -92,12 +91,12 @@ const handleColorSelection = ( colorOptionId: number, selectedColorId: number, s
   if (colorOptionId !== selectedColorId) {
      setSelectedColorId(colorOptionId);
      return;
-  } 
+  }
   setSelectedColorId(0); // Resets the selection if the same color is selected again
-  
+
 };
 
-// Product options rendering function 
+// Product options rendering function
 const renderColorOptions = (
   colors: IProductMainPage["colors_data"],
   selectedColorId: number,

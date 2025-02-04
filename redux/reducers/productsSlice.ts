@@ -36,8 +36,6 @@ export const fetchProducts = createAsyncThunk<IPaginationResponse<IProductMainPa
 
   const productsState = (getState() as RootState).products as IProductsState;
 
-  console.log("Filters: " + JSON.stringify(productsState.filters));
-
   const filteredFilters = Object.fromEntries(
     Object.entries(productsState.filters).filter(
       ([key, value]) => value !== undefined && value !== null
@@ -65,7 +63,7 @@ export const fetchProducts = createAsyncThunk<IPaginationResponse<IProductMainPa
   queryParams.append("page", productsState.page.toString());
 
   try {
-    console.log("Fetching products from page: " + productsState.page);
+
     return await getProductsByFilter(queryParams.toString());
   } catch (error) {
     return rejectWithValue(`${error}`);
@@ -86,7 +84,6 @@ const productsSlice = createSlice({
   initialState,
   reducers: {
     setFilters(state, action) {
-      console.log("Setting filters: " + JSON.stringify(action.payload));
       state.filters = action.payload;
       state.page = 1;
       state.products = [];
@@ -94,14 +91,12 @@ const productsSlice = createSlice({
     setCategory(state, action) {
       state.searchText = "";
       if(state.category === action.payload) return;
-      console.log("Setting category: " + action.payload);
       state.category = action.payload;
       state.page = 1;
       state.products = [];
       state.filters.ordering = null;
     },
     setSearchText(state, action) {
-      console.log("Setting search text: " + action.payload);
       if(state.searchText === action.payload) return;
       state.searchText = action.payload;
       state.page = 1;
@@ -112,7 +107,6 @@ const productsSlice = createSlice({
     //   state.filtered = action.payload;
     // },
     incrementPage(state) {
-      console.log("Incrementing page");
       if(state.next === null) return;
       state.page += 1;
     },
@@ -134,7 +128,7 @@ const productsSlice = createSlice({
         state.status = "fulfilled";
         state.colors = action.payload;
       }),
-      
+
 });
 
 export const { setCategory, setFilters, setSearchText, incrementPage } = productsSlice.actions;

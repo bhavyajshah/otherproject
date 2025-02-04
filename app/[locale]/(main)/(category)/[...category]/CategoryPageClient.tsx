@@ -1,67 +1,84 @@
-"use client";
-//Global
-import { useState, useMemo, useEffect, CSSProperties } from "react";
-//Components
-import { Button, Breadcrumbs, BreadcrumbItem } from "@nextui-org/react";
-import { Filter } from "@/components/Modals/Filter/Filter";
-import { ProductCard } from "@/components/ProductCard/productCard";
-import { EmptyComponent } from "@/components/EmptyComponent/EmptyComponent";
-import { Icons } from "@/components/Icons/Icons";
-//Hooks
-import { useTypedSelector } from "@/hooks/useReduxHooks";
-import { useProducts } from "@/hooks/useProducts";
-import { useTranslate } from "@/hooks/useTranslate";
-import { useInView } from "react-intersection-observer";
-//Utils
-import { SHOP_ROUTE } from "@/utils/Consts";
-//Types
-import { IProductsState } from "@/types/reduxTypes";
-//Styles
-import "swiper/css/pagination";
-import "./catalog.scss";
-import "swiper/css";
+"use client"
 
-interface CategoryPageClientProps {
-  categoryObject: any;  // Consider defining a more specific type
-  categoryId: number;
+import { useState, useMemo, useEffect } from "react"
+import { Button, Breadcrumbs, BreadcrumbItem } from "@nextui-org/react"
+import { Filter } from "@/components/Modals/Filter/Filter"
+import { EmptyComponent } from "@/components/EmptyComponent/EmptyComponent"
+import { Icons } from "@/components/Icons/Icons"
+import { useTypedSelector } from "@/hooks/useReduxHooks"
+import { useProducts } from "@/hooks/useProducts"
+import { useTranslate } from "@/hooks/useTranslate"
+import { useInView } from "react-intersection-observer"
+import { SHOP_ROUTE } from "@/utils/Consts"
+import Link from "next/link"
+import "swiper/css/pagination"
+import "./catalog.scss"
+import "swiper/css"
+import { useLocale } from "next-intl"
+import { ProductCard } from "@/components/ProductCard/productCard"
+
+interface PageData {
+  category: any
+  type?: any
+  subtype?: any
+  subtypes?: any[]
 }
 
-export default function CategoryPageClient({ categoryObject, categoryId }: CategoryPageClientProps) {
+interface CategoryPageClientProps {
+  pageData: PageData
+  params: string[]
+}
 
-  const [isOpen, setIsOpen] = useState(false);
-  //Hooks
-  const { filtered, category, filters, status, searchText, products, page } = useTypedSelector(state => state.products);
+export default function CategoryPageClient({ pageData, params }: CategoryPageClientProps) {
+  // console.log("pageData", pageData)
+  console.log("params", params)
+  console.log("pageData", pageData)
+  const [isOpen, setIsOpen] = useState(false)
+  const { filtered, filters, status, searchText, products, page } = useTypedSelector((state) => state.products)
 
-  const {ref, inView} = useInView();
+  {console.log("Products Data", products)}
+  const { ref, inView } = useInView()
+  const { setAllProducts, onSetCategory, onIncrementPage } = useProducts()
+  const translate = useTranslate()
+  const locale = useLocale()
 
-  const { setAllProducts, handleSearch, onSetFilters, onSetSearchText, onSetCategory, onIncrementPage } = useProducts();
-  const translate = useTranslate();
+  const breadcrumbItems = useMemo(() => {
+    const items = [
+      { href: `/${locale}${SHOP_ROUTE}`, label: translate.mainPageRoute },
+      { href: `/${locale}/${pageData.category.slug}`, label: pageData.category.name },
+    ]
+    if (pageData.type) {
+      items.push({ href: `/${locale}/${pageData.category.slug}/${pageData.type.slug}`, label: pageData.type.name })
+    }
+    if (pageData.subtype) {
+      items.push({
+        href: `/${locale}/${pageData.category.slug}/${pageData.type.slug}/${pageData.subtype.slug}`,
+        label: pageData.subtype.name,
+      })
+    }
+    return items
+  }, [pageData, translate, locale])
 
-  //Styles
-  const buttonStyles: CSSProperties = {
-    background: isOpen ? "#282828" : "#0ABAB5",
-    color: "white",
-    fontSize: "22px",
-    textTransform: 'none'
-  };
-  //ClassNames
-  const filterWrapperClassName = isOpen ? "filter_wrapper active" : "filter_wrapper";
+  const pageTitle = useMemo(() => {
+    return pageData.subtype?.name || pageData.type?.name || pageData.category.name
+  }, [pageData])
 
   useEffect(() => {
     if (inView) {
-      onIncrementPage();
+      onIncrementPage()
     }
-  }, [inView]);
+  }, [inView, onIncrementPage])
 
-  // const newProducts = handleSearch(searchText, products);
-  const setOpen = () => setIsOpen(!isOpen);
+  useEffect(() => {
+    const categoryId = pageData.subtype?.id || pageData.type?.id || pageData.category.id
+    onSetCategory(categoryId)
+    setAllProducts()
+  }, [pageData, onSetCategory, setAllProducts])
 
-  let productsArray = products
+  const productsDisplay = useMemo(() => {
+    if (status === "pending") return <Icons id="spiner" />
 
-  const mapAllProducts = useMemo(() => {
-    // if (status === "pending") return <Icons id="spiner" />;
-
-    if (!productsArray?.length && status === "fulfilled") {
+    if (!products?.length && status === "fulfilled") {
       return (
         <EmptyComponent
           title={translate.emptyCatalogTitle}
@@ -69,75 +86,66 @@ export default function CategoryPageClient({ categoryObject, categoryId }: Categ
           route={SHOP_ROUTE}
           buttonText={translate.emptyCatalogButtonText}
         />
-      );
+      )
     }
 
-    if (productsArray.length)
+    return (
+      <div className="main-product-wrapper">
+        {products?.map((productInfo, index) => (
+          <div ref={index === products.length - 1 ? ref : null} key={productInfo?.id}>
+            <ProductCard productInfo={productInfo} />
+          </div>
+        ))}
+      </div>
+    )
+  }, [products, status, translate, ref])
+
+  const subtypesDisplay = useMemo(() => {
+    if (pageData.subtypes && pageData.subtypes.length > 0) {
       return (
-        <div className="main-product-wrapper">
-          {productsArray?.map((productInfo, index) => {
-            if (index === productsArray.length - 1) {
-              return (
-                <div ref={ref} key={productInfo?.id}>
-                  <ProductCard key={productInfo?.id} productInfo={productInfo} />
-                </div>
-              );
-            }
-            return <ProductCard key={productInfo?.id} productInfo={productInfo} />;
-          })}
+        <div className="subtypes-wrapper mt-4 mb-8">
+          <h2 className="text-xl font-semibold mb-2">Subtypes:</h2>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            {pageData.subtypes.map((subtype) => (
+              <Link
+                key={subtype.id}
+                href={`/${locale}/${pageData.category.slug}/${pageData.type?.slug || params[1]}/${subtype.slug}`}
+                className="p-2 bg-gray-100 rounded hover:bg-gray-200 transition-colors"
+              >
+                {subtype.name}
+              </Link>
+            ))}
+          </div>
         </div>
-      );
-  }, [translate, productsArray, status,]);
-
-
-  const spiner = useMemo(() => {
-    if (status === "pending") return <Icons id="spiner" />;
-  }, [status]);
-
-
-  useEffect(() => {
-    console.log("Setting all products");
-    setAllProducts();
-  }, [filters, searchText, category, page]);
-
-  // useEffect(()=>{
-  //   const newFilters: IProductsState["filters"] = {
-  //     brand: null,
-  //     color: null,
-  //     price_max:10000,
-  //     price_min:0,
-  //     mold: null,
-  //     material: null,
-  //     season: null,
-  //   };
-
-  //   onSetFilters(newFilters);
-  // },[])
-
+      )
+    }
+    return null
+  }, [pageData.subtypes, locale, pageData.category.slug, pageData.type, params])
 
   return (
-    <main className="catalog-wrapper container mx-auto px-[15px] lg:px-[30px]">
+    <div className="catalog-wrapper">
       <Breadcrumbs>
-        <BreadcrumbItem href={SHOP_ROUTE}>{translate.mainPageRoute}</BreadcrumbItem>
-
-        <BreadcrumbItem>{translate.headerCatalog}</BreadcrumbItem>
+        {breadcrumbItems.map((item, index) => (
+          <BreadcrumbItem key={index} href={item.href}>
+            {item.label}
+          </BreadcrumbItem>
+        ))}
       </Breadcrumbs>
 
-      <Button
-        style={buttonStyles}
-        onClick={setOpen}
-        className="filters"
-        startContent={<Icons id="filter" />}
-      >
+      <h1 className="text-2xl font-bold mb-6">{pageTitle}</h1>
+
+      {subtypesDisplay}
+
+      <Button onClick={() => setIsOpen(!isOpen)} className="filters" startContent={<Icons id="filter" />}>
         {translate.catalogFilter}
       </Button>
 
-      <div className={filterWrapperClassName}>
+      <div className={`filter_wrapper ${isOpen ? "active" : ""}`}>
         <Filter />
       </div>
 
-      {mapAllProducts}
-      {spiner}
-    </main>
-  );
+      {productsDisplay}
+      {status === "pending" && <Icons id="spiner" />}
+    </div>
+  )
 }

@@ -59,7 +59,6 @@ export const getCategoryBySlug = async (id: string) => {
 export const getTypes = async () => {
   try {
     const { data } = await $host.get("/api/categories/", {params: { level: 1 }});
-
     return data;
   } catch (error) {
     console.error("Failed get types:" + error);
@@ -70,7 +69,7 @@ export const getTypes = async () => {
 export const getSubTypes = async () => {
   try {
     const { data } = await $host.get("/api/categories/", {params: { level: 2 }});
-
+console.log(data)
     return data;
   } catch (error) {
     console.error("Failed get subtypes:" + error);

@@ -22,12 +22,10 @@ import { useTypedSelector } from "@/hooks/useReduxHooks";
 import { useUserActions } from "@/hooks/useUserActions";
 //Global Types
 import { IInputsLogin } from "@/types/types";
-import { Country } from "@/types/componentTypes";
-//Prefixes
+import { Country } from "@/types/componentTypes";//Prefixes
 import prefixes from "@/locales/prefixes.json";
 //Styles
 import "./login.scss";
-import { useLanguage } from "@/hooks/useLanguage";
 
 const LogIn: NextPage = () => {
   //Hooks
@@ -181,19 +179,19 @@ const LogIn: NextPage = () => {
     const savedPrefix = getCookie("phonePrefix");
     if (savedPrefix) return;
 
-    if (selectedLanguage === "RU") 
+    if (selectedLanguage === "RU")
     {
       setPrefixCode("+7");
       setCountryId("1");
     }
 
-    if (selectedLanguage === "TR") 
+    if (selectedLanguage === "TR")
     {
       setPrefixCode("+90");
       setCountryId("3");
     }
 
-    if (selectedLanguage === "EN") 
+    if (selectedLanguage === "EN")
     {
       setPrefixCode("+1");
       setCountryId("4")

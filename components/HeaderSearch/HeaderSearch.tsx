@@ -35,9 +35,9 @@ const HeaderSearch: FC<IHeaderSearchProps> = ({ allCategories, onSetCategory, ca
   const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {
     if (pathname !== CATALOG_ROUTE) push(CATALOG_ROUTE);
     console.log(e.target.value);
-
+    
     const categoryId = Number(e.target.value);
-
+    
     onSetCategory(categoryId);
   };
 
@@ -58,7 +58,7 @@ const HeaderSearch: FC<IHeaderSearchProps> = ({ allCategories, onSetCategory, ca
     ));
 
   const newCategories = [
-    { id: 0, name: translate?.headerAllCategories, image: null },
+    { id: 0, name: translate.headerAllCategories, image: null },
     ...allCategories,
   ];
   //ClassNames
@@ -79,7 +79,7 @@ const HeaderSearch: FC<IHeaderSearchProps> = ({ allCategories, onSetCategory, ca
       <div className="flex w-[900px]">
         <Select
           disallowEmptySelection
-          label={translate?.headerCategorySelect}
+          label={translate.headerCategorySelect}
           selectedKeys={[category]}
           onChange={handleChange}
           classNames={selectClassName}
@@ -92,7 +92,7 @@ const HeaderSearch: FC<IHeaderSearchProps> = ({ allCategories, onSetCategory, ca
           isClearable
           radius="none"
           className="w-full focus:outline-none"
-          placeholder={translate?.headerSearchPlaceholder}
+          placeholder={translate.headerSearchPlaceholder}
           onClear={handleClear}
           classNames={inputClassName}
         />

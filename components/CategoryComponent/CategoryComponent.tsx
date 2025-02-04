@@ -18,69 +18,73 @@ import "swiper/css";
 import "./CategoryComponent.scss";
 import "swiper/css/pagination";
 
+interface CategoryComponentProps {
+  categoryObject: any;  // Consider defining a more specific type
+  categoryId: number;
+}
 
-const CategoryComponent: FC<{ categoryObject: any; categoryId: number }> = ({ categoryObject, categoryId }) => {
+const CategoryComponent: FC<CategoryComponentProps> = ({ categoryObject, categoryId }) => {
 
-  const {status } = useTypedSelector(state => state.categories);
+  const { status } = useTypedSelector(state => state.categories);
   const { mainPageRoute, lookAll } = useTranslate();
   const { returnSubtypesByType, returnTypesByCategory } = useCategories("");
   const categoryName = Object.keys(categoryObject)[0];
-  
+
   if (status === "pending") return <Icons id="spiner" />;
 
   const renderCategory = () =>
     returnTypesByCategory(categoryId).map(({ name, id: typeId, image }, index: number) => {
-      
-        const filteredSubtypes = returnSubtypesByType(typeId);
 
-        return (
-          <div key={index} className="w-full flex flex-col">
-            <Image
-              className="w-full h-[300px] rounded-md mb-[20px]"
-              src={image?.toString()}
-              alt={name}
-              width={150}
-              height={300}
-            />
+      const filteredSubtypes = returnSubtypesByType(typeId);
 
-            <span className="text-[24px]">{name}</span>
+      return (
+        <div key={index} className="w-full flex flex-col">
+          <Image
+            className="w-full h-[300px] rounded-md mb-[20px]"
+            src={image?.toString()}
+            alt={name}
+            width={150}
+            height={300}
+          />
 
-            <Accordion
-              showDivider={false}
-              itemClasses={{
-                base: "family-bold flex flex-col",
-                title: "text-base",
-                trigger: "flex-row-reverse",
-              }}
-            >
-              {filteredSubtypes.map(({ name }, index) => (
-                <AccordionItem
-                  key={index}
-                  aria-label={name}
-                  indicator={<Icons id="plusAcc" />}
-                  title={
-                    <div className="flex justify-between">
-                      <span className="w-[217px]">{name}</span>
+          <span className="text-[24px]">{name}</span>
 
-                      <span>{filteredSubtypes.length}</span>
-                    </div>
-                  }
-                >
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                </AccordionItem>
-              ))}
-            </Accordion>
+          <Accordion
+            showDivider={false}
+            itemClasses={{
+              base: "family-bold flex flex-col",
+              title: "text-base",
+              trigger: "flex-row-reverse",
+            }}
+          >
+            {filteredSubtypes.map(({ name }, index) => (
+              <AccordionItem
+                key={index}
+                aria-label={name}
+                indicator={<Icons id="plusAcc" />}
+                title={
+                  <div className="flex justify-between">
+                    <span className="w-[217px]">{name}</span>
 
-            <Divider className="my-1" />
+                    <span>{filteredSubtypes.length}</span>
+                  </div>
+                }
+              >
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+              </AccordionItem>
+            ))}
+          </Accordion>
 
-            <div className="flex justify-between">
-              <p className="w-[217px] truncate">{lookAll}</p>
+          <Divider className="my-1" />
 
-              <p>{filteredSubtypes.length}</p>
-            </div>
+          <div className="flex justify-between">
+            <p className="w-[217px] truncate">{lookAll}</p>
+
+            <p>{filteredSubtypes.length}</p>
           </div>
-        );
-      }
+        </div>
+      );
+    }
     );
 
   return (
