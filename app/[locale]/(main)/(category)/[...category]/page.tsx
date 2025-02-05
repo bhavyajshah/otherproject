@@ -58,6 +58,7 @@ export async function generateMetadata({ params }: { params: { category: string[
 }
 
 export default async function Category({ params }: { params: { category: string[] } }) {
+  console.log("params", params)
   try {
     const [categorySlug, typeSlug, subtypeSlug] = params.category
 
@@ -66,7 +67,7 @@ export default async function Category({ params }: { params: { category: string[
     if (!categoryData) return notFound()
 
     const pageData: any = { category: categoryData }
-
+console.log("pageDatas",pageData)
     // If we have a type slug, fetch type and subtype data
     if (typeSlug) {
       const allTypes = await getTypes()

@@ -36,11 +36,13 @@ export default function CategoryPageClient({ pageData, params }: CategoryPageCli
   const [isOpen, setIsOpen] = useState(false)
   const { filtered, filters, status, searchText, products, page } = useTypedSelector((state) => state.products)
 
-  {console.log("Products Data", products)}
+  { console.log("Products Data", products) }
   const { ref, inView } = useInView()
   const { setAllProducts, onSetCategory, onIncrementPage } = useProducts()
   const translate = useTranslate()
   const locale = useLocale()
+
+  console.log("Redux State Products:", { filtered, filters, status, searchText, products, page })
 
   const breadcrumbItems = useMemo(() => {
     const items = [
@@ -71,8 +73,9 @@ export default function CategoryPageClient({ pageData, params }: CategoryPageCli
 
   useEffect(() => {
     const categoryId = pageData.subtype?.id || pageData.type?.id || pageData.category.id
+    console.log("Fetching products for category ID:", categoryId)
     onSetCategory(categoryId)
-    setAllProducts()
+    // setAllProducts()
   }, [pageData, onSetCategory, setAllProducts])
 
   const productsDisplay = useMemo(() => {

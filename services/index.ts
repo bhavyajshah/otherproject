@@ -9,7 +9,7 @@ import { deleteCookie, getCookie } from "cookies-next";
 
 const baseURL = process.env.NEXT_PUBLIC_URL;
 
-const $host = axios.create({ 
+const $host = axios.create({
   baseURL: process.env.BACKEND_URL || process.env.NEXT_PUBLIC_URL
  }),
   $authHost = axios.create({ baseURL });

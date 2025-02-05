@@ -53,6 +53,7 @@ const useProducts = () => {
 
   const handleSearch = (searchText: string, filtered: IProductMainPage[]) => {
     if (!searchText) return filtered;
+
     const lowercasedSearchText = searchText.toLowerCase();
 
     // return filtered.filter(({ name }) =>

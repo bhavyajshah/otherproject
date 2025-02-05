@@ -89,24 +89,12 @@ export const getAllProducts = async () => {
   }
 };
 
-// export const getProducts = async (page: number, filters: IProductsState["filters"]) => {
-//   try {
-//     let url =  "/api/catalog/&page_size=12&page=" + page + `&${filters}`
-//     const { data } = await $host.get(url);
-//     return data;
-//   } catch (error) {
-//     console.error("Error fetching products:" + error);
-//     throw error;
-//   }
-// };
-
-
-export const getProducts = async (category: number, page: number) => {
+export const getProducts = async (category: number) => {
   try {
-    const url = `/api/catalog/?category=${category}&page=${page}&page_size=12`
-
+    const url = `/api/catalog/?price_max=10000&price_min=0&category=${category}&page=1`
     const { data } = await $host.get(url)
-    return data.results
+    console.log("data", data.results)
+    return data
   } catch (error) {
     console.error("Error fetching products:" + error)
     throw error

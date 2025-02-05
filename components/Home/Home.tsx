@@ -123,7 +123,7 @@ const Home = () => {
           <Image
             className="absolute w-full h-full z-0"
             src={back1}
-            alt="back1"   
+            alt="back1"
           />
           <h3 className="family_bold relative z-10 text-[32px]">
             {t('workWithUs')}
@@ -136,7 +136,7 @@ const Home = () => {
             </div>
           </Link>
 
-     
+
 
         <div className="flex flex-col sm:flex-row gap-[15px]">
           <div className="relative rounded-md text-white bg-pink h-[177px] sm:h-auto flex lg:hidden flex-col py-[24px] sm:py-[30px] px-[20px] sm:px-[24px]">
@@ -152,7 +152,7 @@ const Home = () => {
         </div>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 sm:h-[230px] gap-[15px] lg:gap-[24px]">
-        
+
       <Link className="relative rounded-md text-white h-[177px] sm:h-auto flex flex-col items-center justify-center" href={CATALOG_ROUTE}>
 
           <Image
@@ -167,9 +167,9 @@ const Home = () => {
               <p>{translate.newRevenuesLink}</p>
               <Icons id="arrow" />
             </div>
-       
-        </Link> 
-      
+
+        </Link>
+
 
         <Link
           className="hidden lg:flex relative rounded-md text-white bg-pink flex-col py-[30px] px-[24px]"
@@ -202,7 +202,7 @@ const Home = () => {
           </p>
         </Link>
       </div>
-     
+
       <div className="flex flex-col mt-[30px] mb-[30px] w-full">
         <div className="flex items-center justify-between mb-[26px]">
           <h5 className="text-[24px]">{translate.bestsellers}</h5>

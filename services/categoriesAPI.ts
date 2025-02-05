@@ -69,7 +69,6 @@ export const getTypes = async () => {
 export const getSubTypes = async () => {
   try {
     const { data } = await $host.get("/api/categories/", {params: { level: 2 }});
-console.log(data)
     return data;
   } catch (error) {
     console.error("Failed get subtypes:" + error);

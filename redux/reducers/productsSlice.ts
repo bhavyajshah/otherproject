@@ -84,6 +84,7 @@ const productsSlice = createSlice({
   initialState,
   reducers: {
     setFilters(state, action) {
+
       state.filters = action.payload;
       state.page = 1;
       state.products = [];
@@ -91,12 +92,14 @@ const productsSlice = createSlice({
     setCategory(state, action) {
       state.searchText = "";
       if(state.category === action.payload) return;
+      console.log("Setting category: " + action.payload);
       state.category = action.payload;
       state.page = 1;
       state.products = [];
       state.filters.ordering = null;
     },
     setSearchText(state, action) {
+      console.log("Setting search text: " + action.payload);
       if(state.searchText === action.payload) return;
       state.searchText = action.payload;
       state.page = 1;
@@ -107,6 +110,7 @@ const productsSlice = createSlice({
     //   state.filtered = action.payload;
     // },
     incrementPage(state) {
+      console.log("Incrementing page");
       if(state.next === null) return;
       state.page += 1;
     },
